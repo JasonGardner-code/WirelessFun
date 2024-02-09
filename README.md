@@ -38,3 +38,8 @@ To use this script:
 
 ![broadcasting](https://github.com/JasonGardner-code/WirelessFun/assets/51766718/029971cf-4826-4258-8903-56725bd7f4bc)
 
+Here is what we see in the terminal. 
+
+And below is what the devices see. There are slight delays in how the time is received at times but it works well and you can now now tell the time just by looking at your SSIDs.
+
+![id](https://github.com/JasonGardner-code/WirelessFun/assets/51766718/3bdbf705-86e9-479c-9357-c01aac265880)
