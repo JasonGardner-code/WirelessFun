@@ -3,8 +3,9 @@
 #hello_world#
 The hello_world_wav.py script reads an audio file (hello_world.wav) and transmits it using the BladeRF and receives it on a USRP. The received audio is additionally captured to a PCAP file for analysis in Wireshark. Make sure to replace the audio file with your own recording or use any suitable audio file in WAV format.
 
-additional considerations:
-The appropriate sample rate and gain settings depend on various factors, including the characteristics of your signal, the transmission medium, and the capabilities of your hardware. Here are some considerations:
+The appropriate sample rate and gain settings depend on various factors, including the characteristics of your signal, the transmission medium, and the capabilities of your hardware.
+
+Here are some considerations:
 
 ### Sample Rate:
 - **Higher Sample Rate:** A higher sample rate allows you to capture more detail in the signal, especially at higher frequencies. However, it also requires more processing power and bandwidth. Use a sample rate that is at least twice the bandwidth of your signal (Nyquist theorem).
