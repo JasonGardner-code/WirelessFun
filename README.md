@@ -36,4 +36,5 @@ To use this script:
 
 5. Run the script using `bash broadcast_time_loop.sh` or `./broadcast_time_loop.sh` (if you have given executable permissions to the script using `chmod +x broadcast_time_loop.sh`).
 
+![broadcasting](https://github.com/JasonGardner-code/WirelessFun/assets/51766718/029971cf-4826-4258-8903-56725bd7f4bc)
 
