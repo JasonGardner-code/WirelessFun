@@ -24,7 +24,7 @@ It's recommended to start with conservative settings and then gradually increase
 
 Remember that these recommendations are general guidelines, and the optimal settings can vary based on your specific use case. If possible, refer to the documentation for your specific hardware and consider any recommendations or best practices provided by the device manufacturer.
 
-#broadcast_time_SSID#
+### broadcast_time_SSID:
 To use this script:
 1. Make sure you have `hostapd` installed on your system. You can install it using `sudo apt-get install hostapd`.
 
