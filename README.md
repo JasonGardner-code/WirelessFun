@@ -23,4 +23,17 @@ Here are some considerations:
 It's recommended to start with conservative settings and then gradually increase or decrease the sample rate and gain while observing the received signal's quality. Monitor for issues such as distortion, saturation, or inadequate signal strength.
 
 Remember that these recommendations are general guidelines, and the optimal settings can vary based on your specific use case. If possible, refer to the documentation for your specific hardware and consider any recommendations or best practices provided by the device manufacturer.
-#next_#
+
+#broadcast_time_SSID#
+To use this script:
+1. Make sure you have `hostapd` installed on your system. You can install it using `sudo apt-get install hostapd`.
+
+2. Open a text editor, copy the script into a new file, and save it with a `.sh` extension (e.g., `broadcast_time_loop.sh`).
+
+3. Set the appropriate interface name in the `interface` variable.
+
+4. Optionally, modify the `wpa_passphrase` to set the desired passphrase for the Wi-Fi network.
+
+5. Run the script using `bash broadcast_time_loop.sh` or `./broadcast_time_loop.sh` (if you have given executable permissions to the script using `chmod +x broadcast_time_loop.sh`).
+
+
