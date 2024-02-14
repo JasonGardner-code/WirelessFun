@@ -6,11 +6,11 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-# Set up hostapd configuration in a temporary file
-temp_conf="/tmp/hostapd_temp.conf"
-cat <<EOL > $temp_conf
+# Set up initial hostapd configuration
+initial_ssid="🔒WiFi1🔒"
+cat <<EOL > /etc/hostapd/hostapd.conf
 interface=wlan0
-ssid=🔒WiFi1🔒
+ssid=$initial_ssid
 hw_mode=g
 channel=7
 wpa=2
@@ -20,8 +20,8 @@ wpa_pairwise=TKIP
 rsn_pairwise=CCMP
 EOL
 
-# Start hostapd using the temporary configuration file
-hostapd $temp_conf &
+# Start hostapd
+hostapd /etc/hostapd/hostapd.conf &
 
 # Function to generate random emoji SSID
 generate_random_emoji_ssid() {
@@ -32,6 +32,7 @@ generate_random_emoji_ssid() {
 # Loop to change SSID every 5 seconds
 while true; do
   new_ssid=$(generate_random_emoji_ssid)
-  sed -i "s/^ssid=.*/ssid=$new_ssid/" $temp_conf
+  sed -i "s/^ssid=.*/ssid=$new_ssid/" /etc/hostapd/hostapd.conf
+  systemctl restart hostapd  # Restart hostapd to apply changes
   sleep 5
 done
