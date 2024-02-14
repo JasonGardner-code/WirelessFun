@@ -1,7 +1,14 @@
 #!/bin/bash
 
-# Set up hostapd configuration
-cat <<EOL > /etc/hostapd/hostapd.conf
+# Check if running as root
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root. Use 'sudo ./script.sh'" 
+   exit 1
+fi
+
+# Set up hostapd configuration in a temporary file
+temp_conf="/tmp/hostapd_temp.conf"
+cat <<EOL > $temp_conf
 interface=wlan0
 ssid=🔒WiFi1🔒
 hw_mode=g
@@ -13,8 +20,8 @@ wpa_pairwise=TKIP
 rsn_pairwise=CCMP
 EOL
 
-# Start hostapd
-hostapd /etc/hostapd/hostapd.conf &
+# Start hostapd using the temporary configuration file
+hostapd $temp_conf &
 
 # Function to generate random emoji SSID
 generate_random_emoji_ssid() {
@@ -25,6 +32,6 @@ generate_random_emoji_ssid() {
 # Loop to change SSID every 5 seconds
 while true; do
   new_ssid=$(generate_random_emoji_ssid)
-  sed -i "s/^ssid=.*/ssid=$new_ssid/" /etc/hostapd/hostapd.conf
+  sed -i "s/^ssid=.*/ssid=$new_ssid/" $temp_conf
   sleep 5
 done
