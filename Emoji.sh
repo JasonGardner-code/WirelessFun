@@ -1,4 +1,3 @@
-```bash
 #!/bin/bash
 
 # Array of emoji names
@@ -30,15 +29,6 @@ function create_wifi_networks() {
     echo "channel=6" >> "$config_file"
     echo "wpa=2" >> "$config_file"
     echo "wpa_passphrase=Password" >> "$config_file"
-    hostapd "$config_file" &
+    sudo hostapd "$config_file" &
     show_notification "$emoji"
-    sleep 5
-    counter=$((counter + 1))
-  done
-}
 
-# Function to display notification with emoji
-function show_notification() {
-  emoji=$1
-
-  
