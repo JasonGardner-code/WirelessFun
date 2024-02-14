@@ -1,34 +1,30 @@
 #!/bin/bash
 
-# Array of emoji names
-emojis=("😀" "😍" "🌈" "🍕" "🎉" "🐱" "🚀" "🌍" "🌺" "🍦" "🎸" "🌟" "🐶" "🎮" "🌞" "🍔" "🌸" "🍩" "🎧" "🌊" "🍓" "🦄" "🐼" "🍨" "🎶" "🌙" "🍟" "🦜" "🍉" "🌴" "🎵" "🌮" "🐠" "🍿" "🌹" "🍪" "🎺" "🌄" "🥳" "🐯" "🚗")
+# Set up hostapd configuration
+cat <<EOL > /etc/hostapd/hostapd.conf
+interface=wlan0
+ssid=🔒WiFi1🔒
+hw_mode=g
+channel=7
+wpa=2
+wpa_passphrase=password
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+EOL
 
-# Maximum length of SSID
-max_length=32
+# Start hostapd
+hostapd /etc/hostapd/hostapd.conf &
 
-# Function to truncate SSID to maximum length
-function truncate_ssid() {
-  ssid=$1
-  if [ ${#ssid} -gt $max_length ]; then
-    ssid=${ssid:0:$max_length}
-  fi
-  echo "$ssid"
+# Function to generate random emoji SSID
+generate_random_emoji_ssid() {
+  emojis=("📶WiFi2📶" "🔵WiFi3🔵" "🌐WiFi4🌐" "🚀WiFi5🚀")
+  echo ${emojis[$((RANDOM % ${#emojis[@]}))]}
 }
 
-# Function to create Wi-Fi access points with emojis as SSIDs using hostapd
-function create_wifi_networks() {
-  counter=0
-  while true; do
-    emoji=${emojis[counter % ${#emojis[@]}]}
-    ssid=$(truncate_ssid "$emoji")
-    config_file="/etc/hostapd/hostapd.conf"
-    echo "interface=wlan0" > "$config_file"
-    echo "driver=nl80211" >> "$config_file"
-    echo "ssid=$ssid" >> "$config_file"
-    echo "hw_mode=g" >> "$config_file"
-    echo "channel=6" >> "$config_file"
-    echo "wpa=2" >> "$config_file"
-    echo "wpa_passphrase=Password" >> "$config_file"
-    sudo hostapd "$config_file" &
-    show_notification "$emoji"
-
+# Loop to change SSID every 5 seconds
+while true; do
+  new_ssid=$(generate_random_emoji_ssid)
+  sed -i "s/^ssid=.*/ssid=$new_ssid/" /etc/hostapd/hostapd.conf
+  sleep 5
+done
