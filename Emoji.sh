@@ -1,19 +1,10 @@
 #!/bin/bash
 
 # Array of emoji names
-emojis=("😀" "😀" "😍" "🌈" "🍕" "🎉" "🐱" "🚀" "🌍" "🌺" "🍦" "🎸" "🌟" "🐶" "🎮" "🌞" "🍔" "🌸" "🍩" "🎧" "🌊" "🍓" "🦄" "🐼" "🍨" "🎶" "🌙" "🍟" "🦜" "🍉" "🌴" "🎵" "🌮" "🐠" "🍿" "🌹" "🍪" "🎺" "🌄" "🥳" "🐯" "🚗" "🍦" "🐙" "🌻" "🍭" "🎤" "🌳" "🌌" "🍟" "🦊" "🍇" "🌷" "🍫" "🎼" "🌜" "🥨" "🍌" "🌵" "🎷" "🌃" "🌭" "🦀" "🍪" "🌹" "🍿" "🌰" "🎻" "🌅" "🍦" "🐹" "🚀" "🌈" "🍕" "🎉" "🐱" "🚀" "🌍" "🌺" "🍦" "🎸" "🌟" "🐶" "🎮" "🌞" "🍔" "🌸" "🍩" "🎧" "🌊" "🍓" "🦄" "🐼" "🍨" "🎶" "🌙" "😍" "🍕" "🎉" "🐱" "🚀" "🌍" "🌺" "🍦" "🎸" "🌟" "🐶" "🎮" "🌞" "🍔" "🌸" "🍩" "🎧" "🌊" "🍓" "🦄" "🐼" "🍨" "🎶" "🌙" "🍟" "🦜" "🍉" "🌴" "🎵" "🌮" "🐠" "🍿" "🌹" "🍪" "🎺" "🌄" "🥳" "🐯" "🚗")
+emojis=("😀" "😍" "🌈" "🍕" "🎉" "🐱" "🚀" "🌍" "🌺" "🍦" "🎸" "🌟" "🐶" "🎮" "🌞" "🍔" "🌸" "🍩" "🎧" "🌊" "🍓" "🦄" "🐼" "🍨" "🎶" "🌙" "🍟" "🦜" "🍉" "🌴" "🎵" "🌮" "🐠" "🍿" "🌹" "🍪" "🎺" "🌄" "🥳" "🐯" "🚗")
 
 # Maximum length of SSID
 max_length=32
-
-# Function to display available Wi-Fi networks
-function display_wifi_networks() {
-  clear
-  echo "Scanning for Wi-Fi networks..."
-  echo "-------------------------------------"
-  iwlist <wifi_card_name> scan | grep ESSID | awk -F'"' '{print $2}'
-  echo "-------------------------------------"
-}
 
 # Function to truncate SSID to maximum length
 function truncate_ssid() {
@@ -24,21 +15,22 @@ function truncate_ssid() {
   echo "$ssid"
 }
 
-# Function to change displayed emojis every 5 seconds
-function change_emojis() {
+# Function to create Wi-Fi access points with emojis as SSIDs using hostapd
+function create_wifi_networks() {
   counter=0
   while true; do
-    display_wifi_networks
-    echo "Current Emojis:"
-    for ((i=counter; i<counter+5; i++)); do
-      index=$((i % ${#emojis[@]}))
-      emoji=${emojis[index]}
-      ssid=$(truncate_ssid "$emoji")
-      echo "$ssid"
-    done
-    counter=$((counter + 5))
+    emoji=${emojis[counter % ${#emojis[@]}]}
+    ssid=$(truncate_ssid "$emoji")
+    config_file="/tmp/hostapd.conf"
+    echo "interface=wlan0" > "$config_file"
+    echo "ssid=$ssid" >> "$config_file"
+    echo "hw_mode=g" >> "$config_file"
+    echo "channel=6" >> "$config_file"
+    echo "wpa=2" >> "$config_file"
+    echo "wpa_passphrase=<your_password>" >> "$config_file"
+    hostapd "$config_file" &
+    show_notification "$emoji"
     sleep 5
+    counter=$((counter + 1))
   done
 }
-
-This version of the script includes a wider variety of emojis, excluding rainbows. Save the updated script,
