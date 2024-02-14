@@ -1,3 +1,4 @@
+```bash
 #!/bin/bash
 
 # Array of emoji names
@@ -21,16 +22,23 @@ function create_wifi_networks() {
   while true; do
     emoji=${emojis[counter % ${#emojis[@]}]}
     ssid=$(truncate_ssid "$emoji")
-    config_file="/tmp/hostapd.conf"
+    config_file="/etc/hostapd/hostapd.conf"
     echo "interface=wlan0" > "$config_file"
+    echo "driver=nl80211" >> "$config_file"
     echo "ssid=$ssid" >> "$config_file"
     echo "hw_mode=g" >> "$config_file"
     echo "channel=6" >> "$config_file"
     echo "wpa=2" >> "$config_file"
-    echo "wpa_passphrase=<your_password>" >> "$config_file"
+    echo "wpa_passphrase=Password" >> "$config_file"
     hostapd "$config_file" &
     show_notification "$emoji"
     sleep 5
     counter=$((counter + 1))
   done
 }
+
+# Function to display notification with emoji
+function show_notification() {
+  emoji=$1
+
+  
