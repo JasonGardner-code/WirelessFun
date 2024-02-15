@@ -43,3 +43,18 @@ Here is what we see in the terminal.
 And below is what the devices see. There are slight delays in how the time is received at times but it works well and you can now now tell the time just by looking at your SSIDs.
 
 ![id](https://github.com/JasonGardner-code/WirelessFun/assets/51766718/3bdbf705-86e9-479c-9357-c01aac265880)
+
+### 2adapter.sh ###
+Step 1: Prepare Configuration Files
+First, prepare two configuration files for hostapd: hostapd_card1.conf and hostapd_card2.conf. These files should be pre-configured with the settings for each wireless card, except for the SSID which will be dynamically updated. Example configuration for hostapd_card1.conf (and similarly for hostapd_card2.conf with appropriate adjustments for the interface):
+
+2. run script
+   
+Key Points:
+Ensure each hostapd instance is correctly set up for your hardware. The interface names (wlan0, wlan1) should match those of your wireless cards.
+
+SSID Length: Since the length of emojis in terms of byte size can vary and some devices might not support very long SSIDs, ensure the generated SSID is within a reasonable length. This script assumes it stops adding emojis once the string length is 32 characters or more, but you may need to adjust this based on how your system calculates the length of Unicode characters.
+
+Running the Script: Run this script as root or with sudo to ensure it has the necessary permissions to modify hostapd configuration files and reload the service.
+
+This setup assumes that you have both hostapd instances configured to start with their respective configuration files and that your system correctly supports managing multiple wireless interfaces simultaneously.
