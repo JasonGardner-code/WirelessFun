@@ -58,3 +58,41 @@ SSID Length: Since the length of emojis in terms of byte size can vary and some 
 Running the Script: Run this script as root or with sudo to ensure it has the necessary permissions to modify hostapd configuration files and reload the service.
 
 This setup assumes that you have both hostapd instances configured to start with their respective configuration files and that your system correctly supports managing multiple wireless interfaces simultaneously.
+
+
+### z.sh ###
+
+# Dynamic Emoji SSID with Zalgo Text
+
+Welcome to the dynamic emoji SSID generator with Zalgo text! This Bash script creates a continuously changing WiFi SSID, composed of random emojis enhanced with Zalgo text effects, ensuring your WiFi network stands out in the most cyberpunk way possible.
+
+## How It Works
+
+The script selects random emojis from a predefined list and adds a touch of Zalgo text to each, generating an SSID that's both unique and visually intriguing. It then updates the SSID of your WiFi network at one-minute intervals, keeping the broadcast fresh and dynamic.
+
+## Features
+
+- Generates a unique emoji-based SSID.
+- Enhances emojis with Zalgo text for a more eerie, cyberpunk aesthetic.
+- Updates WiFi SSID every minute.
+
+## Setup Instructions
+
+1. **Ensure `hostapd` is installed**: The script requires `hostapd` for creating the WiFi network. Install it using your package manager if you haven't already.
+
+2. **Configure `hostapd`**: Modify `hostapd_card1.conf` and `hostapd_card2.conf` with your specific settings, such as interface and driver.
+
+3. **Run the Script**: Execute the script with `sudo ./dynamic_emoji_ssid.sh` to start broadcasting your dynamic SSIDs.
+
+
+## Disclaimer
+
+This script is intended for educational and experimental purposes. Please ensure you comply with local regulations and consent requirements before broadcasting SSIDs in public spaces.
+
+## Contributing
+
+Feel free to fork this repository, submit pull requests, or suggest features to make this project even more fun.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
