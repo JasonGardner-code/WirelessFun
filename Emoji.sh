@@ -1,36 +1,49 @@
 #!/bin/bash
 
-# Configuration parameters
-interface="wlan0"
-ssid_prefix="MyPi-"
-emojis=("😀" "😎" "🤖" "🚀" "🔧" "📡" "🌐" "🔍" "🎉")
+# Function to generate random emoji SSID
+generate_emoji_ssid() {
+    # Array of emojis with allowable Unicode
+    emojis=("🌟" "🔥" "🌈" "🎉" "🐱" "🦄" "🍕" "🚀" "🌺" "🍦" "🎸" "📚" "🎈" "🍩" "🍀" "💡" "🌍" "🌞" "🐾" "🎨")
 
-# Function to update SSID
-update_ssid() {
-    local count=$1
-    local emoji_index=$((count % ${#emojis[@]}))
-    local new_ssid="$ssid_prefix${emojis[$emoji_index]}-$count"
-    
-    # Command to update the SSID using hostapd_cli
-    sudo hostapd_cli set config_ssid "$new_ssid"
+    # Get random emoji from the array
+    random_index=$(( RANDOM % ${#emojis[@]} ))
+    echo "${emojis[$random_index]}"
 }
 
-# Function to configure hostapd
-configure_hostapd() {
-    sudo systemctl stop hostapd
-    sudo systemctl stop dhcpcd
+# Install hostapd if not already installed
+if ! command -v hostapd &> /dev/null; then
+    sudo apt-get update
+    sudo apt-get install -y hostapd
+fi
 
-    # Add any additional hostapd configuration options here if needed
-    sudo hostapd -B /etc/hostapd/hostapd.conf
+# Configure hostapd
+sudo cat <<EOF > /etc/hostapd/hostapd.conf
+interface=wlan0
+driver=nl80211
+ssid=$(generate_emoji_ssid)
+hw_mode=g
+channel=6
+ieee80211n=1
+wmm_enabled=1
+ht_capab=[HT40][SHORT-GI-20][DSSS_CCK-40]
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=password123
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+EOF
 
-    sudo systemctl start hostapd
-    sudo systemctl start dhcpcd
-}
+# Start hostapd
+sudo systemctl unmask hostapd
+sudo systemctl enable hostapd
+sudo systemctl start hostapd
 
-# Main loop counting down from 100
-count=100
-while [ $count -ge 0 ]; do
-    update_ssid "$count"
-    sleep 2
-    ((count--))
+# Continuously send out new SSID every 5 seconds
+while true; do
+    sudo sed -i "s/^ssid=.*/ssid=$(generate_emoji_ssid)/" /etc/hostapd/hostapd.conf
+    sudo systemctl restart hostapd
+    sleep 5
 done
